@@ -19,13 +19,14 @@
   }
   *{ margin:0; padding:0; box-sizing:border-box; }
   body{ background: var(--concreto); color: var(--tinta); font-family:'Inter', sans-serif; padding-bottom:3rem; }
+
   header{ background: var(--acero); color:#fff; padding:1.4rem 1.2rem 1.6rem; position:relative; overflow:hidden; }
   header::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:6px;
-  background: repeating-linear-gradient(-45deg, var(--amarillo) 0 14px, var(--acero) 14px 28px); }
+    background: repeating-linear-gradient(-45deg, var(--amarillo) 0 14px, var(--acero) 14px 28px); }
   header h1{ font-family:'Oswald', sans-serif; font-size:1.6rem; letter-spacing:0.03em; text-transform:uppercase; }
   header p{ color:#B9B9B4; font-size:0.85rem; margin-top:2px; }
   .header-fila{ display:flex; justify-content:space-between; align-items:flex-start; }
-  .btn-salir{ background:(var(--amarillo); border:1px solid #555; color:#B9B9B4; font-size:0.72rem; padding:0.3rem 0.6rem; border-radius:4px; cursor:pointer; }
+  .btn-salir{ background:none; border:1px solid #555; color:#B9B9B4; font-size:0.72rem; padding:0.3rem 0.6rem; border-radius:4px; cursor:pointer; }
 
   .login-wrap{ max-width:340px; margin:3rem auto; padding:0 1.2rem; }
   .login-wrap h2{ font-family:'Oswald', sans-serif; text-transform:uppercase; margin-bottom:0.8rem; }
@@ -59,7 +60,7 @@
   .ficha .info{ flex:1; padding:0.7rem 0.85rem; min-width:0; }
   .ficha .nombre{ font-weight:600; font-size:0.92rem; }
   .ficha .categoria{ font-size:0.72rem; color:var(--tinta-suave); margin-top:1px; }
-   .ficha .foto-mini{ width:80px; height:60px; object-fit:cover; border-radius:35px; border:1px solid var(--borde); float:right; margin-left:0.5rem; }
+  .ficha .foto-mini{ width:44px; height:44px; object-fit:cover; border-radius:5px; border:1px solid var(--borde); float:right; margin-left:0.5rem; }
   .ficha .atributos{ font-size:0.72rem; color:var(--tinta-suave); margin-top:3px; display:flex; flex-wrap:wrap; gap:0.3rem; }
   .ficha .atributos span{ background:var(--concreto); border-radius:4px; padding:0.1rem 0.4rem; }
   .ficha .fila-stock{ display:flex; align-items:center; justify-content:space-between; margin-top:0.5rem; flex-wrap:wrap; gap:0.4rem; }
@@ -150,8 +151,8 @@
     /* =====================================================================
        CONEXIÓN A SUPABASE — pegá acá tus datos de Project Settings > API
        ===================================================================== */
-    const SUPABASE_URL = "https://xqcrmxjfhceajsptrqax.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxY3JteGpmaGNlYWpzcHRycWF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0NTU1MzAsImV4cCI6MjEwMjAzMTUzMH0.8PFXD_cmIK5RWSg5WpKP7z4hAKgsD3Gx2ciQC4vJAMw";
+    const SUPABASE_URL = "PEGA_ACA_TU_PROJECT_URL";
+    const SUPABASE_ANON_KEY = "PEGA_ACA_TU_ANON_KEY";
 
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -580,7 +581,13 @@
     // Sube un archivo al bucket de Storage y devuelve su URL pública
     async function subirArchivo(file, subcarpeta){
       if(!file) return null;
-      const nombreArchivo = `${subcarpeta}/${Date.now()}_${file.name}`;
+      // Supabase Storage rechaza nombres con símbolos raros (ø, ñ, espacios, etc.)
+      // Acá lo limpiamos: sacamos tildes y reemplazamos cualquier otro
+      // caracter que no sea letra/número/punto/guion por "_"
+      const nombreSeguro = file.name
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9.\-_]/g, "_");
+      const nombreArchivo = `${subcarpeta}/${Date.now()}_${nombreSeguro}`;
       const { error } = await db.storage.from(BUCKET_ARCHIVOS).upload(nombreArchivo, file);
       if(error){ alert("No se pudo subir el archivo: " + error.message); return null; }
       const { data } = db.storage.from(BUCKET_ARCHIVOS).getPublicUrl(nombreArchivo);
