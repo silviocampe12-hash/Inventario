@@ -19,32 +19,7 @@
   }
   *{ margin:0; padding:0; box-sizing:border-box; }
   body{ background: var(--concreto); color: var(--tinta); font-family:'Inter', sans-serif; padding-bottom:3rem; }
-/* =============================================================================================================================================================================================
-	.btn-scan → el botón "Escanear" de la barra de búsqueda
-	.btn-salir → "Salir" y "+ Producto" del header
-	.stepper button → los botones +/- de cantidad
-	.link-editar / .link-eliminar → los links "Editar" y "Eliminar" de cada ficha
-	.btn-guardar → "Guardar producto" / "Guardar cambios"
-	.btn-cancelar → "Cancelar" del formulario
-	.btn-marcar-gps / .btn-quitar-gps → los de GPS dentro del formulario
-
-	En cada una podés cambiar background (color de fondo), 
-	color (color de letra), 
-	border-radius (redondez), 
-	padding (tamaño),
-	font-size, etc. 
-
-	— usá los mismos nombres de variables que ya están arriba de todo (var(--amarillo), var(--acero), etc.) si querés mantener la paleta consistente.
-
-	Para agregar un botón nuevo, se hace en dos partes:
-
-		1) En el HTML (o dentro de un return en JavaScript que arma una ficha/formulario), 
-			agregás la etiqueta, por ejemplo: <button class="btn-salir" onclick="miFuncion()">Texto</button>
-		2) Si el botón tiene que hacer algo, escribís una función nueva en el <script> con ese mismo nombre (function miFuncion(){ ... }) 
-			— igual que están armadas cambiarStock, eliminarProducto, etc., que podés usar de modelo.
- ============================================================================================================================================================================================= */ 
-
-header{ background: var(--acero); color:#fff; padding:1.4rem 1.2rem 1.6rem; position:relative; overflow:hidden; }
+  header{ background: var(--acero); color:#fff; padding:1.4rem 1.2rem 1.6rem; position:relative; overflow:hidden; }
   header::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:6px;
   background: repeating-linear-gradient(-45deg, var(--amarillo) 0 14px, var(--acero) 14px 28px); }
   header h1{ font-family:'Oswald', sans-serif; font-size:1.6rem; letter-spacing:0.03em; text-transform:uppercase; }
@@ -84,16 +59,7 @@ header{ background: var(--acero); color:#fff; padding:1.4rem 1.2rem 1.6rem; posi
   .ficha .info{ flex:1; padding:0.7rem 0.85rem; min-width:0; }
   .ficha .nombre{ font-weight:600; font-size:0.92rem; }
   .ficha .categoria{ font-size:0.72rem; color:var(--tinta-suave); margin-top:1px; }
-  /* =====================================================================      
-	- width / height: tamaño del cuadrado de la miniatura (subilos a 60px, 80px, lo que quieras).
-
-	- object-fit:cover: recorta la imagen para que llene el cuadrado sin deformarse (si querés que se vea completa aunque queden bordes vacíos, cambialo a contain).
-
-	- border-radius: qué tan redondeadas son las esquinas (0 = cuadrada, 50% = círculo).
-
-	- float:right: hace que quede a la derecha del texto — sacá esa línea si preferís que esté arriba del nombre en vez de al costado.
-       ===================================================================== */ 
-  .ficha .foto-mini{ width:80px; height:60px; object-fit:cover; border-radius:35px; border:1px solid var(--borde); float:right; margin-left:0.5rem; }
+   .ficha .foto-mini{ width:80px; height:60px; object-fit:cover; border-radius:35px; border:1px solid var(--borde); float:right; margin-left:0.5rem; }
   .ficha .atributos{ font-size:0.72rem; color:var(--tinta-suave); margin-top:3px; display:flex; flex-wrap:wrap; gap:0.3rem; }
   .ficha .atributos span{ background:var(--concreto); border-radius:4px; padding:0.1rem 0.4rem; }
   .ficha .fila-stock{ display:flex; align-items:center; justify-content:space-between; margin-top:0.5rem; flex-wrap:wrap; gap:0.4rem; }
